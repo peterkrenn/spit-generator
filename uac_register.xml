@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
+
+<scenario name="Basic Sipstone UAC">
+  <send retrans="500">    
+    <![CDATA[
+      REGISTER sip:[field2] SIP/2.0
+      CSeq: [cseq] REGISTER
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      User-Agent: SIPp
+      From: "[field0]" <sip:[field0]@[field2]>;tag=[call_number]
+      Call-ID: [call_id]
+      To: "[field0]" <sip:[field0]@[field2]>
+      Contact: <sip:[field0]@[local_ip]:[local_port]>
+      Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, NOTIFY, MESSAGE, SUBSCRIBE, INFO
+      Expires: 3600
+      Content-Length: 0
+      Max-Forwards: 70
+    ]]>
+  </send>
+  <recv response="100" optional="true">
+  </recv>
+  <recv response="401" auth="true">
+  </recv>
+  <send retrans="500">
+    <![CDATA[
+      REGISTER sip:[field2] SIP/2.0
+      CSeq: [cseq] REGISTER
+      Via: SIP/2.0/UDP [local_ip]:[local_port];branch=[branch]
+      User-Agent: SIPp
+      [field1]
+      From: <sip:[field0]@[field2]>;tag=[call_number]
+      Call-ID: [call_id]
+      To: <sip:[field0]@[field2]>
+      Contact: <sip:[field0]@[local_ip]:[local_port];transport=[transport]>
+      Allow: INVITE,ACK,OPTIONS,BYE,CANCEL,NOTIFY,REFER,MESSAGE
+      Expires: 3600
+      Content-Length: 0
+      Max-Forwards: 70
+    ]]>
+  </send>
+  <recv response="100" optional ="true">
+  </recv>
+  <recv response="401" auth="true" optional="true">
+  </recv>
+  <recv response="200">
+  </recv>
+</scenario>
