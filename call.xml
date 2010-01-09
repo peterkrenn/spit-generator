@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
+
+<scenario name="spit_call">
+  <send>
+    <![CDATA[
+      INVITE sip:[field0]@[field1] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+      User-Agent: SIPp
+      From: MM_07-O <sip:MM_07-O@ibk.tuwien.ac.at:[local_port]>;tag=[call_number]
+      To: [field0] <sip:[field1]:[remote_port]>[peer_tag_param]
+      Call-ID: [call_id]
+      CSeq: [cseq] INVITE
+      Contact: <sip:MM_07-O@[local_ip]:[local_port];transport[transport]>
+      Max-Forwards: 70
+      Subject: SPIT
+      Allow: INVITE,ACK,OPTIONS,BYE,CANCEL,NOTIFY,REFER,MESSAGE
+      Content-Type: application/sdp
+      Content-Length: [len]
+
+      v=0
+      o=- 4 2 IN IP[local_ip_type] [local_ip]
+      s=-
+      c=IN IP[local_ip_type] [local_ip]
+      t=0 0
+      m=audio [media_port] RTP/AVP 8
+      a=rtpmap:8 PCMA/8000/1
+      a=sendonly
+      m=video [media_port+2] RTP/AVP 106
+      a=sendonly
+      a=rtpmap:106 h263-1998/90000
+    ]]>
+  </send>
+
+  <recv response="100" optional="true">
+  </recv>
+
+  <recv response="180" optional="true">
+  </recv>
+
+  <recv response="480" optional="true" next="2">
+  </recv>
+
+  <recv response="200">
+    <action>
+      <ereg regexp="[_a-zA-Z0-9-]*@[0-9]*.[0-9]*.[0-9]*.[0-9]*:[0-9]*" search_in="hdr" header="Contact:" check_it="true" assign_to="contact" />
+    </action>
+  </recv>
+
+  <send>
+    <![CDATA[
+      ACK sip:[$contact] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      Max-Forwards: 70
+      To: [field0] <sip:[field0]@[remote_ip]:[remote_port]>[peer_tag_param]
+      From: MM_07-O <sip:MM_07-O@[local_ip]:[local_port]>;tag=[call_number]
+      Call-ID: [call_id]
+      CSeq: [cseq] ACK
+      Contact: <sip:MM_07-O@[local_ip]:[local_port];transport=[transport]>
+      Subject: SPIT
+      Content-Length: 0
+    ]]>
+  </send>
+
+  <nop>
+    <action>
+      <exec play_pcap_audio="pcap/g711a.pcap" />
+    </action>
+  </nop>
+
+  <pause milliseconds="10000" />
+
+  <send>
+    <![CDATA[
+      BYE sip:[$contact] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      Max-Forwards: 70
+      Route: <sip:128.131.88.77;lr=on>
+      To: "[field0]"<sip:[field0]@[remote_ip]:[remote_port]>[peer_tag_param]
+      From: "MM_07-O"<sip:MM_07-O@[local_ip]:[local_port]>;tag=[call_number]
+      Call-ID: [call_id]
+      CSeq: [cseq] BYE
+      Contact: <sip:MM_07-O@[local_ip]:[local_port];transport=[transport]>
+      Allow: INVITE,ACK,OPTIONS,BYE,CANCEL,NOTIFY,REFER,MESSAGE
+      Content-Length: 0
+    ]]>
+  </send>
+
+  <recv response="404" optional="true" next="1">
+  </recv>
+
+  <recv response="200" crlf="true" next="1">
+  </recv>
+
+  <label id="2" />
+
+  <send next="1">
+    <![CDATA[
+      SIP/2.0 200 OK
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      To: "[field0]"<sip:[field0]@[remote_ip]:[remote_port]>[peer_tag_param]
+      From: "MM_07-O"<sip:MM_07-O@[local_ip]:[local_port]>;tag=[call_number]
+      Call-ID: [call_id]
+      CSeq: [cseq] BYE
+      Contact: <sip:MM_07-O@[local_ip]:[local_port];transport=[transport]>
+      Content-Type: application/sdp
+      Content-Length: [len]
+
+      v=0
+      o=- 4 2 IN IP[local_ip_type] [local_ip]
+      s=-
+      c=IN IP[local_ip_type] [local_ip]
+      t=0 0
+      m=audio [media_port] RTP/AVP 8
+      a=rtpmap:8 PCMA/8000/1
+      a=sendonly
+      m=video [media_port+2] RTP/AVP 106
+      a=sendonly
+      a=rtpmap:106 h263-1998/90000
+    ]]>
+  </send>
+
+  <recv request="BYE" optional="global" next="2"/>
+
+  <label id="1" />
+</scenario>
