@@ -4,14 +4,14 @@
 <scenario name="spit_register">
   <send retrans="500">
     <![CDATA[
-      REGISTER sip:ibk.tuwien.ac.at SIP/2.0
+      REGISTER sip:[domain] SIP/2.0
       CSeq: [cseq] REGISTER
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       User-Agent: SIPp
-      From: MM_07-O <sip:MM_07-O@ibk.tuwien.ac.at>;tag=[call_number]
+      From: [user] <sip:[user]@[domain]>;tag=[call_number]
       Call-ID: [call_id]
-      To: MM_07-O <sip:MM_07-O@ibk.tuwien.ac.at>
-      Contact: <sip:MM_07-O@[local_ip]:[local_port];transport=[transport]>
+      To: [user] <sip:[user]@[domain]>
+      Contact: <sip:[user]@[local_ip]:[local_port];transport=[transport]>
       Allow: INVITE,ACK,CANCEL,OPTIONS,BYE,REFER,NOTIFY,MESSAGE,SUBSCRIBE,INFO
       Expires: 3600
       Content-Length: 0
@@ -27,15 +27,15 @@
 
   <send retrans="500">
     <![CDATA[
-      REGISTER sip:ibk.tuwien.ac.at SIP/2.0
+      REGISTER sip:[domain] SIP/2.0
       CSeq: [cseq] REGISTER
       Via: SIP/2.0/UDP [local_ip]:[local_port];branch=[branch]
       User-Agent: SIPp
-      [authentication username=MM_07-O password=HRjg0ui6]
-      From: "MM_07-O"<sip:MM_07-O@ibk.tuwien.ac.at>;tag=[call_number]
+      [authentication]
+      From: [user] <sip:[user]@[domain]>;tag=[call_number]
       Call-ID: [call_id]
-      To: <sip:MM_07-O@ibk.tuwien.ac.at>
-      Contact: <sip:MM_07-O@[local_ip]:[local_port];transport=[transport]>
+      To: <sip:[user]@[domain]>
+      Contact: <sip:[user]@[local_ip]:[local_port];transport=[transport]>
       Allow: INVITE,ACK,OPTIONS,BYE,CANCEL,NOTIFY,REFER,MESSAGE
       Expires: 3600
       Content-Length: 0

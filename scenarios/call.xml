@@ -7,11 +7,11 @@
       INVITE sip:[field0]@[field1] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
       User-Agent: SIPp
-      From: MM_07-O <sip:MM_07-O@ibk.tuwien.ac.at:[local_port]>;tag=[call_number]
+      From: [user] <sip:[user]@[domain]:[local_port]>;tag=[call_number]
       To: [field0] <sip:[field1]:[remote_port]>[peer_tag_param]
       Call-ID: [call_id]
       CSeq: [cseq] INVITE
-      Contact: <sip:MM_07-O@[local_ip]:[local_port];transport[transport]>
+      Contact: <sip:[user][local_ip]:[local_port];transport[transport]>
       Max-Forwards: 70
       Subject: SPIT
       Allow: INVITE,ACK,OPTIONS,BYE,CANCEL,NOTIFY,REFER,MESSAGE
@@ -53,10 +53,10 @@
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       Max-Forwards: 70
       To: [field0] <sip:[field0]@[remote_ip]:[remote_port]>[peer_tag_param]
-      From: MM_07-O <sip:MM_07-O@[local_ip]:[local_port]>;tag=[call_number]
+      From: [user] <sip:[user]@[local_ip]:[local_port]>;tag=[call_number]
       Call-ID: [call_id]
       CSeq: [cseq] ACK
-      Contact: <sip:MM_07-O@[local_ip]:[local_port];transport=[transport]>
+      Contact: <sip:[user]@[local_ip]:[local_port];transport=[transport]>
       Subject: SPIT
       Content-Length: 0
     ]]>
@@ -75,12 +75,12 @@
       BYE sip:[$contact] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       Max-Forwards: 70
-      Route: <sip:128.131.88.77;lr=on>
-      To: "[field0]"<sip:[field0]@[remote_ip]:[remote_port]>[peer_tag_param]
-      From: "MM_07-O"<sip:MM_07-O@[local_ip]:[local_port]>;tag=[call_number]
+      Route: <sip:[remote_ip];lr=on>
+      To: [field0] <sip:[field0]@[remote_ip]:[remote_port]>[peer_tag_param]
+      From: [user] <sip:[user]@[local_ip]:[local_port]>;tag=[call_number]
       Call-ID: [call_id]
       CSeq: [cseq] BYE
-      Contact: <sip:MM_07-O@[local_ip]:[local_port];transport=[transport]>
+      Contact: <sip:[user]@[local_ip]:[local_port];transport=[transport]>
       Allow: INVITE,ACK,OPTIONS,BYE,CANCEL,NOTIFY,REFER,MESSAGE
       Content-Length: 0
     ]]>
@@ -98,11 +98,11 @@
     <![CDATA[
       SIP/2.0 200 OK
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      To: "[field0]"<sip:[field0]@[remote_ip]:[remote_port]>[peer_tag_param]
-      From: "MM_07-O"<sip:MM_07-O@[local_ip]:[local_port]>;tag=[call_number]
+      To: [field0] <sip:[field0]@[remote_ip]:[remote_port]>[peer_tag_param]
+      From: [user] <sip:[user]@[local_ip]:[local_port]>;tag=[call_number]
       Call-ID: [call_id]
       CSeq: [cseq] BYE
-      Contact: <sip:MM_07-O@[local_ip]:[local_port];transport=[transport]>
+      Contact: <sip:[user]@[local_ip]:[local_port];transport=[transport]>
       Content-Type: application/sdp
       Content-Length: [len]
 
