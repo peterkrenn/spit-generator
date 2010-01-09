@@ -153,7 +153,7 @@ class Spit < Thor
     @calls.each do |call|
       case call[:status]
         when 'picked up':
-          puts "#{call[:uri]} picked up after #{call[:picked_up_after].round} seconds and was on the line for #{call[:duration]} seconds."
+          puts "#{call[:uri]} picked up after #{call[:picked_up_after].round} seconds and was on the line for #{call[:duration].round} seconds"
         else
           puts "#{call[:uri]} #{call[:status]}"
       end
