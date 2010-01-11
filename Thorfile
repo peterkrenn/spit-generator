@@ -1,7 +1,8 @@
 class Spit < Thor
   desc 'start', 'run the SPIT generator'
-  method_options :'uri-file' => :string
+  method_options :ip => :required
   method_options :transport => :string
+  method_options :'uri-file' => :string
   def start
     invoke :register
     invoke :call
@@ -10,9 +11,10 @@ class Spit < Thor
   end
 
   desc 'register', 'registers spit user with registrar'
+  method_options :ip => :required
   method_options :transport => :string
   def register
-    command = "#{config['sipp']} #{config['host']} -m 1 "
+    command = "#{config['sipp']} #{config['host']} -m 1 -i #{options['ip']} "
     command += [scenario_option('register'),
                 user_option,
                 authentication_option,
@@ -29,14 +31,15 @@ class Spit < Thor
   end
 
   desc 'call', 'calls selected URIs'
-  method_options :'uri-file' => :string
+  method_options :ip => :required
   method_options :transport => :string
+  method_options :'uri-file' => :string
   def call
     puts 'Calling...'
 
     uri_file = options['uri-file'] || config['uri_file']
 
-    command = "#{config['sipp']} #{config['host']} -m #{File.open(uri_file).lines.count - 1} -l 2 -trace_shortmsg "
+    command = "#{config['sipp']} #{config['host']} -m #{File.open(uri_file).lines.count - 1} -l 2 -trace_shortmsg -i #{options['ip']} "
     command += [scenario_option('call'),
                 user_option,
                 inject_option(uri_file),
@@ -47,9 +50,10 @@ class Spit < Thor
   end
 
   desc 'unregister', 'unregisters spit user with registrar'
+  method_options :ip => :required
   method_options :transport => :string
   def unregister
-    command = "#{config['sipp']} #{config['host']} -m 1 "
+    command = "#{config['sipp']} #{config['host']} -m 1 -i #{options[:ip]} "
     command += [scenario_option('unregister'),
                 user_option,
                 authentication_option,
