@@ -36,7 +36,7 @@ class Spit < Thor
 
     uri_file = options['uri-file'] || config['uri_file']
 
-    command = "#{config['sipp']} #{config['host']} -m #{File.open('uris.csv').lines.count - 1} -l 2 -trace_shortmsg "
+    command = "#{config['sipp']} #{config['host']} -m #{File.open(uri_file).lines.count - 1} -l 2 -trace_shortmsg "
     command += [scenario_option('call'),
                 user_option,
                 inject_option(uri_file),
