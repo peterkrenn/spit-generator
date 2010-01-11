@@ -1,5 +1,6 @@
 class Spit < Thor
   desc 'start', 'run the SPIT generator'
+  method_options :'uri-file' => :string
   def start
     invoke :register
     invoke :call
@@ -23,10 +24,14 @@ class Spit < Thor
   end
 
   desc 'call', 'calls selected URIs'
+  method_options :'uri-file' => :string
   def call
     puts 'Calling...'
+
+    uri_file = options['uri-file'] || config['uri_file']
+
     command = "#{config['sipp']} #{config['host']} -m #{File.open('uris.csv').lines.count - 1} -l 2 -trace_shortmsg "
-    command += [scenario_option('call'), user_option, inject_option].join(' ')
+    command += [scenario_option('call'), user_option, inject_option(uri_file)].join(' ')
     `#{command} 2> /dev/null`
 
     puts 'Finished'
@@ -85,8 +90,8 @@ class Spit < Thor
     "-s #{config['user']} -ap #{config['password']}"
   end
 
-  def inject_option
-    '-inf uris.csv'
+  def inject_option(uri_file)
+    "-inf #{uri_file}"
   end
 
   def parse_log_files
