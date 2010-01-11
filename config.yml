@@ -3,6 +3,8 @@ user: MM_07-O
 password: HRjg0ui6
 domain: ibk.tuwien.ac.at
 
+transport: udp
+
 uri_file: uris.csv
 
 sipp: sipp

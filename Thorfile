@@ -1,6 +1,7 @@
 class Spit < Thor
   desc 'start', 'run the SPIT generator'
   method_options :'uri-file' => :string
+  method_options :transport => :string
   def start
     invoke :register
     invoke :call
@@ -9,9 +10,14 @@ class Spit < Thor
   end
 
   desc 'register', 'registers spit user with registrar'
+  method_options :transport => :string
   def register
     command = "#{config['sipp']} #{config['host']} -m 1 "
-    command += [scenario_option('register'), user_option, authentication_option].join(' ')
+    command += [scenario_option('register'),
+                user_option,
+                authentication_option,
+                transport_option(options)].join(' ')
+    puts command
     `#{command} 2> /dev/null`
 
     if $?.exitstatus.zero?
@@ -25,22 +31,30 @@ class Spit < Thor
 
   desc 'call', 'calls selected URIs'
   method_options :'uri-file' => :string
+  method_options :transport => :string
   def call
     puts 'Calling...'
 
     uri_file = options['uri-file'] || config['uri_file']
 
     command = "#{config['sipp']} #{config['host']} -m #{File.open('uris.csv').lines.count - 1} -l 2 -trace_shortmsg "
-    command += [scenario_option('call'), user_option, inject_option(uri_file)].join(' ')
+    command += [scenario_option('call'),
+                user_option,
+                inject_option(uri_file),
+                transport_option(options)].join(' ')
     `#{command} 2> /dev/null`
 
     puts 'Finished'
   end
 
   desc 'unregister', 'unregisters spit user with registrar'
+  method_options :transport => :string
   def unregister
     command = "#{config['sipp']} #{config['host']} -m 1 "
-    command += [scenario_option('unregister'), user_option, authentication_option].join(' ')
+    command += [scenario_option('unregister'),
+                user_option,
+                authentication_option,
+                transport_option(options)].join(' ')
     `#{command} 2> /dev/null`
 
     if $?.exitstatus.zero?
@@ -92,6 +106,10 @@ class Spit < Thor
 
   def inject_option(uri_file)
     "-inf #{uri_file}"
+  end
+
+  def transport_option(options)
+    '-t t1' if config['transport'] == 'tcp' or options['transport'] == 'tcp'
   end
 
   def parse_log_files
