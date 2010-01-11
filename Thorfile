@@ -17,7 +17,6 @@ class Spit < Thor
                 user_option,
                 authentication_option,
                 transport_option(options)].join(' ')
-    puts command
     `#{command} 2> /dev/null`
 
     if $?.exitstatus.zero?
