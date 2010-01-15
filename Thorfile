@@ -139,7 +139,7 @@ class Spit < Thor
         call[:status] = 'is not registered'
       elsif group[2][6] =~ /180 Ringing/
         group[3..-1].each do |entry|
-          if entry[6] =~ /200 OK/
+          if entry[6] =~ /ACK/
             call[:picked_up_at] = entry[2].to_f
             call[:picked_up_after] = entry[2].to_f - group[2][2].to_f
             break
